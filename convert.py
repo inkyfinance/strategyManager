@@ -20,28 +20,31 @@ def convert(text):
         # Finds market and amount
         bracket = re.search('(Buy|Sell)\s(when)\s(crossover|crossunder)[(](.*?)[)]', text)
         parameter = bracket.group(4).split(',')
+
         default.exchange = parameter[0]
+        strategy = "indi[i:i+1]['Close'] ARROW " + parameter[1] + " and crossover==True"
 
-        # Defines strategy
-        if text.__contains__('crossover'):
-            strategy = "indi[i:i+1]['Close'] ARROW AMOUNT and crossover==True"
-            strategy = strategy.replace("AMOUNT", parameter[1])
-
-            # Defines action
-            if re.match('^Buy', text):
+        # Defines action
+        if re.match('^Buy', text):
+            # Defines strategy
+            if text.__contains__('crossover'):
                 strategy = strategy.replace("ARROW", ">")
-                default.algorithm = {
-                    'entry': strategy,
-                    'exit': default.algorithm['exit']
-                }
             else:
                 strategy = strategy.replace("ARROW", "<")
-                default.algorithm = {
-                    'entry': default.algorithm['entry'],
-                    'exit': strategy
-                }
+            default.algorithm = {
+                'entry': strategy,
+                'exit': default.algorithm['exit']
+            }
         else:
-            strategy = 'crossunder'
+            # Defines strategy
+            if text.__contains__('crossover'):
+                strategy = strategy.replace("ARROW", "<")
+            else:
+                strategy = strategy.replace("ARROW", ">")
+            default.algorithm = {
+                'entry': default.algorithm['entry'],
+                'exit': strategy
+            }
 
 
 while True:
