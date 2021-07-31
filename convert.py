@@ -1,18 +1,13 @@
 import re
 import sys
+import strategies as st
+import argparse
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--file", "-f", type=str, required=False, help='read from a file')
+args = parser.parse_args()
 
-class Strategy:
-    def __init__(self, name, exchange, entry, exit):
-        self.name = name
-        self.exchange = exchange
-        self.algorithm = {
-            'entry': entry,
-            'exit': exit
-        }
-
-
-default = Strategy("name", "exchange", "entry", "exit")
+default = st.Strategy("name", "exchange", "market", "entry", "exit")
 
 
 def convert(text):
@@ -21,7 +16,7 @@ def convert(text):
         bracket = re.search('(Buy|Sell)\s(when)\s(crossover|crossunder)[(](.*?)[)]', text)
         parameter = bracket.group(4).split(',')
 
-        default.exchange = parameter[0]
+        default.market = parameter[0]
         strategy = "indi[i:i+1]['Close'] ARROW " + parameter[1] + " and crossover==True"
 
         # Defines action
@@ -45,11 +40,22 @@ def convert(text):
                 'entry': default.algorithm['entry'],
                 'exit': strategy
             }
+    else:
+        print("Invalid command")
 
 
-while True:
-    inp = input("Enter pseudocode command:\n")
-    if inp == "exit":
-        sys.exit()
-    convert(inp)
-    print(default.name, default.exchange, "['", default.algorithm['entry'], "']", "['", default.algorithm['exit'], "']")
+if args.file is not None:
+    print("Reading from file...")
+    lines = open(args.file, "r").readlines()
+    for x in lines:
+        convert(x)
+    print(default.name, default.exchange, "['", default.algorithm['entry'], "']", "['", default.algorithm['exit'],
+          "']")
+else:
+    while True:
+        inp = input('Enter pseudocode command: ("q" to exit)\n')
+        if inp == "q":
+            sys.exit()
+        convert(inp)
+        print(default.name, default.exchange, "['", default.algorithm['entry'], "']", "['", default.algorithm['exit'],
+              "']")
