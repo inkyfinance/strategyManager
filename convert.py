@@ -48,7 +48,7 @@ def convert(text):
 
 
 while True:
-    inp = input()
+    inp = input("Enter pseudocode command:\n")
     if inp == "exit":
         sys.exit()
     convert(inp)
