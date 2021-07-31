@@ -4,7 +4,7 @@ import numpy as np
 import os
 import matplotlib.pyplot as plt
 class Strategy:
-    def __init__(self, name,exchange,entry,exit):
+    def __init__(self, name,exchange, market,entry,exit):
         self.name=name
         self.exchange=exchange
         self.algorithm={
@@ -87,9 +87,9 @@ class Strategy:
         self.indi=indi
 
 
-strat=Strategy("alex","coinbase",["indi[i:i+1]['EMA20 Close'][0] > indi[i:i+1]['EMA50 Close'][0]"], ["indi[i:i+1]['EMA20 Close'][0] < indi[i:i+1]['EMA50 Close'][0]"])
+strat=Strategy("alex","coinbase", "BTC",["indi[i:i+1]['EMA20 Close'][0] > indi[i:i+1]['EMA50 Close'][0]"], ["indi[i:i+1]['EMA20 Close'][0] < indi[i:i+1]['EMA50 Close'][0]"])
 
-print(strat.getIndicators())
-strat.backtest(500)
+#print(strat.getIndicators())
+#strat.backtest(500)
 
 
