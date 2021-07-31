@@ -38,14 +38,14 @@ class Strategy:
         bought=False
 
         for i in range(startIndex,len(indi)-1):
-            if indi[i:i+1]['EMA20 Close'][0] > indi[i:i+1]['EMA50 Close'][0] and bought==False:
+            if eval(self.algorithm['entry'][0]) and bought==False:
                 if strategy[i:i+1]['crossover'][0]==True:
                     bought=True
                     balance=balance/indi[i:i+1]['close'][0]
                     #print("buy",indi[i:i+1]['close'][0],balance)
 
 
-            if indi[i:i+1]['EMA20 Close'][0] < indi[i:i+1]['EMA50 Close'][0] and bought==True:
+            if eval(self.algorithm['exit'][0]) and bought==True:
                 if strategy[i:i+1]['crossover'][0]==True:
                     balance=balance*indi[i:i+1]['close'][0]
                     #print("sell",indi[i:i+1]['close'][0],balance)
@@ -89,7 +89,7 @@ class Strategy:
         self.indi=indi
 
 
-strat=Strategy("alex","coinbase",["if indi['EMA20 Close'] > indi['EMA50 Close'] and strategy['crossover']=='True'"], ["if EMA20 Close < EMA50 Close and strategy['crossover']=='True'"])
+strat=Strategy("alex","coinbase",["indi[i:i+1]['EMA20 Close'][0] > indi[i:i+1]['EMA50 Close'][0]"], ["indi[i:i+1]['EMA20 Close'][0] < indi[i:i+1]['EMA50 Close'][0]"])
 
 print(strat.getIndicators())
 strat.backtest(500)
