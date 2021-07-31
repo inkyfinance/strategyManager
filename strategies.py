@@ -38,15 +38,13 @@ class Strategy:
         bought=False
 
         for i in range(startIndex,len(indi)-1):
-            if eval(self.algorithm['entry'][0]) and bought==False:
-                if strategy[i:i+1]['crossover'][0]==True:
+            if eval(self.algorithm['entry'][0]) and bought==False and strategy[i:i+1]['crossover'][0]==True:
                     bought=True
                     balance=balance/indi[i:i+1]['close'][0]
                     #print("buy",indi[i:i+1]['close'][0],balance)
 
 
-            if eval(self.algorithm['exit'][0]) and bought==True:
-                if strategy[i:i+1]['crossover'][0]==True:
+            if eval(self.algorithm['exit'][0]) and bought==True and strategy[i:i+1]['crossover'][0]==True:
                     balance=balance*indi[i:i+1]['close'][0]
                     #print("sell",indi[i:i+1]['close'][0],balance)
                     bought=False
