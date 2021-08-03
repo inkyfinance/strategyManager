@@ -7,6 +7,7 @@ class Strategy:
     def __init__(self, name,exchange, market,entry,exit):
         self.name=name
         self.exchange=exchange
+        self.market=market
         self.algorithm={
             'entry':entry,
             'exit':exit
