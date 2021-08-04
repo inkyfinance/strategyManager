@@ -1,2 +1,2 @@
-Buy when crossover(BTC,30000)
+Buy when crossover(EMA20,30000)
 Sell when crossunder(BTC,30000)

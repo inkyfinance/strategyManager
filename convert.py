@@ -18,13 +18,11 @@ def convert(text):
         parameter = bracket.group(4).split(',')
 
         identity1 = parameter[0]
-        print(identity1)
         identity2 = parameter[1]
-        if not re.match('.*[0-9].*',identity1):
-            print('NO MATCH')
-            identity1 = "indi[i:i+1]['" + identity1 + "']"
-        if not re.match('.*[0-9].*',identity2):
-            identity2 = "indi[i:i+1]['" + identity2 + "']"
+        if not re.match('^[0-9]*$',identity1):
+            identity1 = "indi[i:i+1]['" + identity1 + "'][0]"
+        if not re.match('^[0-9]*$',identity2):
+            identity2 = "indi[i:i+1]['" + identity2 + "'][0]"
         strategy = identity1 + " ARROW " + identity2 + " and crossover==True"
 
         # Defines action
