@@ -16,14 +16,15 @@ def convert(text):
         # Finds market and amount
         bracket = re.search('(Buy|Sell)\s(when)\s(crossover|crossunder)[(](.*?)[)]', text)
         parameter = bracket.group(4).split(',')
+        type = bracket.group(3)
 
         identity1 = parameter[0]
         identity2 = parameter[1]
         if not re.match('^[0-9]*$',identity1):
-            identity1 = "indi[i:i+1]['" + identity1 + "'][0]"
+            identity1 = "indi[i:i+1]['" + identity1 + " Close'][0]"
         if not re.match('^[0-9]*$',identity2):
-            identity2 = "indi[i:i+1]['" + identity2 + "'][0]"
-        strategy = identity1 + " ARROW " + identity2 + " and crossover==True"
+            identity2 = "indi[i:i+1]['" + identity2 + " Close'][0]"
+        strategy = identity1 + " ARROW " + identity2 + " and " + type + "==True"
 
         # Defines action
         if re.match('^Buy', text):
