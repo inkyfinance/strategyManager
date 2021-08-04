@@ -89,7 +89,7 @@ class Strategy:
 
 strat=Strategy("alex","coinbase", "BTC",["indi[i:i+1]['EMA20 Close'][0] > indi[i:i+1]['EMA50 Close'][0]"], ["indi[i:i+1]['EMA20 Close'][0] < indi[i:i+1]['EMA50 Close'][0]"])
 
-#print(strat.getIndicators())
-#strat.backtest(500)
+print(strat.getIndicators())
+strat.backtest(500)
 
 
