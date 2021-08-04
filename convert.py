@@ -12,7 +12,7 @@ default = st.Strategy("name", "exchange", "market", "entry", "exit")
 
 
 def convert(text):
-    if re.match('(Buy|Sell)\s(when)\s(crossover|crossunder)[(].*[.-^].*,.*[.-^].*[)]', text):
+    if re.match('^(Buy|Sell)\s(when)\s(crossover|crossunder)[(].*,.*[)]', text):
         # Finds market and amount
         bracket = re.search('(Buy|Sell)\s(when)\s(crossover|crossunder)[(](.*?)[)]', text)
         parameter = bracket.group(4).split(',')
@@ -20,9 +20,9 @@ def convert(text):
 
         identity1 = parameter[0]
         identity2 = parameter[1]
-        if not re.match('^[0-9]*$',identity1):
+        if not re.match('^[0-9]*$', identity1):
             identity1 = "indi[i:i+1]['" + identity1 + " Close'][0]"
-        if not re.match('^[0-9]*$',identity2):
+        if not re.match('^[0-9]*$', identity2):
             identity2 = "indi[i:i+1]['" + identity2 + " Close'][0]"
         strategy = identity1 + " ARROW " + identity2 + " and " + type + "==True"
 
@@ -47,13 +47,22 @@ def convert(text):
                 'entry': default.algorithm['entry'],
                 'exit': strategy
             }
-    elif re.match('(Load|Save|Clear)\s(database)', text):
+    elif re.match('^(Load|Save|Clear)\s(database)', text):
         if re.match('^Load', text):
             stMan.loadDataframe()
         elif re.match('^Save', text):
             stMan.saveDataframe()
         elif re.match('^Clear', text):
             stMan.clearDataframe()
+    elif re.match('^(Set)\s(market|exchange)[(].*[)]', text):
+        bracket = re.search('^(Set)\s(market|exchange)[(](.*?)[)]', text)
+        parameter = bracket.group(3)
+        topic = bracket.group(2)
+        if topic == 'market':
+            default.market = parameter
+        elif topic == 'exchange':
+            print("Setting exchange")
+            default.exchange = parameter
     else:
         print("Invalid command")
 
@@ -63,7 +72,8 @@ if args.file is not None:
     lines = open(args.file, "r").readlines()
     for x in lines:
         convert(x)
-    print(default.name, default.exchange, default.market,  "['", default.algorithm['entry'], "']", "['", default.algorithm['exit'],
+    print(default.name, default.exchange, default.market, "['", default.algorithm['entry'], "']", "['",
+          default.algorithm['exit'],
           "']")
 else:
     while True:
@@ -71,5 +81,6 @@ else:
         if inp == "q":
             sys.exit()
         convert(inp)
-        print(default.name, default.exchange, default.market, "['", default.algorithm['entry'], "']", "['", default.algorithm['exit'],
+        print(default.name, default.exchange, default.market, "['", default.algorithm['entry'], "']", "['",
+              default.algorithm['exit'],
               "']")
